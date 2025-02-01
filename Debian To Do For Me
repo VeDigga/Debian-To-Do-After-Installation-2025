@@ -1,0 +1,469 @@
+https://github.com/VeDigga/Debian-To-Do-After-Installation-2025.git
+
+
+Ich habe Dinge gesehen, die ihr Menschen niemals glauben würdet. 
+Gigantische Schiffe, die brannten, draußen vor der Schulter des Orion. 
+Und ich habe C-Beams gesehen, glitzernd im Dunkeln, nahe dem Tannhäuser Tor. 
+All diese Momente werden verloren sein in der Zeit, so wie Tränen im Regen. [Pause] 
+Zeit zu sterben.
+Blade Runner
+
+
+											                                  2025-02-01			
+Debian 13 GNU/Linux – To Do
+
+
+
+$ su -
+$ adduser digga sudo oder # usermod -aG sudo digga und Reboot!
+  
+
+Traditionell öffnet visudo die Datei /etc/sudoers mit dem vi-Texteditor. 
+sudo update-alternatives --config editor
+sudo visudo
+
+$ sudo apt update && sudo apt upgrade
+
+$ uname -a
+$ cat /etc/debian_version
+
+Script ausführbar machen
+In der Regel ruft man ein Script nicht über einen geeigneten Interpreter, sondern macht die Datei ausführbar.
+Wenn das Script mit Root-Rechten als User "root" oder als Benutzer mit "sudo" erstellt wurde:
+sudo chmod +x debian-12-gnomesettings-hstr.sh
+Wenn das Script mit Benutzer-Rechten erstellt wurde (ohne sudo):
+chmod +x debian-12-gnomesettings-hstr.sh
+
+$ chmod 755 debian-12-gnomesettings-hstr.sh
+$ ./debian-12-gnomesettings-hstr.sh
+
+Kernel Update
+
+$ apt-cache search linux-image
+$ sudo apt install linux-image-6.0.0-2-amd64
+$ sudo apt install linux-headers-6.0.0-2-amd64
+$ sudo update-initramfs -u -k all -v
+
+$ sudo apt-get install neofetch htop btop++ glances lshw lshw-gtk inxi okular vlc mpv smplayer git gparted hardinfo wget vim transmission-gtk pavucontrol geany gimp inkscape audacity filezilla  -y
+
+$ sudo su
+$ echo neofetch >> /etc/bash.bashrc
+
+Installiere die Pakete für die AMD Treiber
+$ sudo apt-get install firmware-amd-graphics libgl1-mesa-dri libglx-mesa0 mesa-vulkan-drivers xserver-xorg-video-all
+
+
+To install the firmware: 
+
+Please go to index : kernel/git/firmware/linux-firmware.git and download the latest firmware package into your Downloads directory. 
+Right-click the downloaded file and select "Extract here". That will create a directory. 
+Open that directory in your file manager. In that directory, open a terminal and run the following lines one at a time. 
+
+# cd /home/hstr/Downloads/linux-firmware-20220509
+$ sudo cp -r * /lib/firmware/
+$ sudo update-initramfs -u -k all -v
+Reboot the computer!
+
+
+
+
+
+
+Firewall aktivieren
+Um ein Linux-System zu sichern, ist es sehr empfehlenswert, die OS-Firewall zu aktivieren. In Debain 12 haben wir ufw, also aktiviere sie, indem du folgende Befehle ausführst,
+$ sudo apt install ufw -y
+$ sudo ufw enable
+$ sudo ufw default deny incoming
+$ sudo ufw allow outgoing
+$ sudo ufw allow ssh
+Mit den oben genannten Befehlen haben wir den gesamten eingehenden Datenverkehr mit Ausnahme von ssh blockiert und den gesamten ausgehenden Datenverkehr zugelassen.
+
+
+GRUB
+
+$ sudo nano /etc/default/grub
+
+GRUB_DEFAULT=0
+#GRUB_TIMEOUT_STYLE=menu
+GRUB_TIMEOUT=7
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT=""
+GRUB_CMDLINE_LINUX=""
+
+GRUB_GFXMODE=1920x1200x32
+GRUB_GFXPAYLOAD_LINUX=keep
+GRUB_DISABLE_OS_PROBER=false
+
+GRUB_THEME="/boot/grub/themes/Xenlism-Debian/theme.txt"
+
+$ sudo update-grub
+GRUB neue installieren
+$ sudo grub-install /dev/sda
+
+GRUB Theme
+
+$ sudo mkdir /boot/grub/themes 
+$ sudo cp /etc/default/grub /etc/default/grub.bak
+$ sudo nano /etc/default/grub
+GRUB_THEME="/boot/grub/themes/Xenlism-Debian/theme.txt"
+$ sudo update-grub
+
+
+Google Chrome
+
+$ sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+$ sudo chown -R _apt ./google-chrome-stable_current_amd64.deb
+$ sudo apt install ./google-chrome-stable_current_amd64.deb
+$ sudo apt autopurge gnome-keyring
+curl -fSsL https://dl.google.com/linux/linux_signing_key.pub | sudo gpg –dearmor | sudo tee /usr/share/keyrings/google-chrome.gpg >> /dev/null
+
+echo deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main | sudo tee /etc/apt/sources.list.d/google-chrome.list
+
+sudo apt update
+
+sudo apt install google-chrome-stable
+
+
+
+NVRAM korrigieren
+
+$ sudo efibootmgr
+# Löschen unnötige Einträge
+$ sudo efibootmgr -b 0000 -B
+Eintrag 0007 in der Boot-Reihenfolge an den ersten Platz gesetzt:
+$ sudo efibootmgr -o 0007,0004,0005
+Aufräumarbeiten
+Ganz am Schluss mache ich noch schnell den Frühjahrsputz
+$ sudo apt-get clean && sudo apt-get autoclean && sudo apt-get autoremove
+
+Conky
+$ cp /etc/conky/conky.conf ~/.conkyrc
+
+$ sudo dmesg | grep -i microcode
+$ sudo grep -E 'family|model|stepping|microcode' /proc/cpuinfo | head -5
+$ sudo apt-get install intel-microcode
+
+
+
+
+
+
+
+Selbst mit weit geöffneten Augen sehe ich nicht das Geringste.
+Zatoichi – Der blinde Samurai
+
+
+Themes – Icons – Fonts									
+Arc und Moca Icons muss zusammen installiert werden!
+
+$ sudo apt install gnome-tweaks
+Install GNOME Extensions Manager
+$ sudo apt install gnome-shell-extension-manager gnome-shell-extensions-extra -y
+$ sudo apt update && sudo apt upgrade
+$ sudo apt-get install gtk2-engines-murrine gtk2-engines-pixbuf
+$ sudo apt install arc-theme papirus-icon-theme moka-icon-theme paper-icon-theme -y
+$ ls
+$ sudo cp -r ~/Downloads/Nordic-master /usr/share/themes/
+
+Gnome Desktop Settings
+$ gsettings set org.gnome.desktop.interface gtk-theme "Arc-Dark"
+$ gsettings set org.gnome.desktop.wm.preferences theme "Arc-Dark"
+$ gsettings set org.gnome.desktop.interface monospace-font-name "Source Code Pro Regular 9"
+$ gsettings set org.gnome.desktop.interface document-font-name 'Source Code Pro Regular 9'
+$ gsettings set org.gnome.desktop.interface font-name 'Source Code Pro Regular 9'
+$ gsettings set org.gnome.desktop.wm.preferences titlebar-font 'Source Code Pro Bold 9'
+
+§ gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+
+§ gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+
+Backup And Restore Linux Desktop System Settings With Dconf
+
+
+$ sudo apt install dconf*
+$ dconf dump / > hstr-desktop
+$ cat hstr-desktop
+$ dconf reset -f /
+$ dconf load / < hstr-desktop
+$ man dconf
+$ sudo dconf update
+dconf dump / > full-backup
+dconf load / < full-backup
+How To Install Oranchelo Icon Theme Manually In Linux?
+$ cd ~/Downloads
+$ sudo git clone https://github.com/OrancheloTeam/oranchelo-icon-theme.git
+$ cd oranchelo-icon-theme
+$ sudo ./oranchelo-installer.sh
+
+$ sudo git clone https://github.com/snwh/paper-icon-theme.git
+$ cd paper-icon-theme
+$ sudo mv Paper /usr/share/icons
+$ sudo git clone https://github.com/cbrnix/Newaita.git
+$ cd Newaita
+$ sudo mv Newaita /usr/share/icons/
+$ sudo mv Newaita-dark /usr/share/icons/
+sudo gtk-update-icon-cache -f /usr/share/icons/hicolor/
+gsettings set org.gnome.shell.extensions.user-theme name "Flat-Remix-Grey-Dark-fullPanel"
+$ sudo cp -r * /usr/share/themes/
+$ sudo cp -r * /usr/share/icons/
+Fonts
+$ sudo apt-get install font-manager
+
+Zum Merken:
+
+Natürlich kann man die Installation auch manuell durch einfaches kopieren erledigen.
+Die Fonts für den einzelnen User liegen im usereigenen Profil, also im Ordner [/home/username/.fonts/] (hier kommen Fonts nur für den bestimmten User hin).
+Unter [/usr/local/share/fonts/] liegen Fonts die Systemweit für alle User gelten (hier kommen selbst installierte Systemfonts hin).
+Unter [/usr/share/fonts/] liegen die vom System vorinstallierten Fonts, diese werden bei Updates mit aktualisiert, daher sollte man diese nicht manuell verändern (vorhandene Systemfonts).
+Fonts sind nachdem der Schriftencache aufgefrischt wurde [fc-cache -fv] sofort Systemweit für alle Anwendungen verfügbar.
+Zuletzt noch den Schriftencache aktualisieren:
+
+$ sudo fc-cache -fv
+$ sudo apt-get install ttf-mscorefonts-installer fonts-croscore fonts-ibm-plex ttf-anonymous-pro
+$ sudo apt-get install ttf-ubuntu-font-family
+
+# cd /home/hstr/Downloads
+$ sudo cp -r * /usr/local/share/fonts/
+$ sudo git clone https://github.com/adobe-fonts/source-code-pro.git /usr/local/share/fonts/adobe-fonts/source-code-pro
+
+Linux-Kernel für Debian selbst kompilieren
+https://linux-bibel.at/index.php/2024/02/03/linux-kernel-fuer-debian-selbst-kompilieren/
+
+Der Kernel bringt unter Linux die wichtigsten Treiber mit, ein aktuellerer Kernel natürlich auch aktuellere Treiber. Ein aktuellerer Kernel bringt aber auch die Behebung von Fehlern aus älteren Kerneln und natürlich auch mehr Geschwindigkeit.
+In diesem Beitrag der Linux Bibel sehen wir uns an, wie wir unter Debian einen aktuellen Kernel selbst kompilieren – es ist viel einfacher als man denkt.
+Voraussetzungen schaffen
+Als Erstes werden über die Paket-Verwaltung die nötigen Pakete installiert – als root am Terminal:
+apt install libncurses-dev fakeroot wget bzip2 build-essential bc python3 bison flex rsync libelf-dev libssl-dev libncurses-dev dwarves git debhelper ncurses-dev fakeroot wget bzip2
+Haben Sie eine NVIDIA-Grafikkarte installiert, benötigen Sie noch deren Kernel-Treiber – suchen Sie etwa unter Synaptic nach „nvidia“ und installieren das passende Paket mit dem Zusatz „dkms„. Danach laden wir uns von Kernel.org den aktuellsten Kernel herunter:
+ 
+Mainline ist die aktuellste Entwickler-Version – dieser muss nicht unbedingt stabil sein, ich hatte allerdings noch nie Probleme damit – Einsteigern rate ich jedoch davon ab. Stable wäre für produktive Systeme natürlich optimal. Sie laden den Tarball herunter und entpacken diesen. 
+Anschließend wechseln Sie auf dem Terminal in das entpackte Verzeichnis und kopieren die Konfiguration des aktuellen Kernels in das Verzeichnis – als normaler Benutzer:
+$ sudo cp /boot/config-`uname -r` .config
+Jetzt öffnen Sie diese gerade kopierte (versteckte Datei) mit einem beliebigen Texteditor – ich mache dies gleich am Terminal mit Vim:
+$ vim .config oder sudo nano .config
+Hier fügen Sie gleich am Beginn vier neue Zeilen ein:
+scripts/config --disable SYSTEM_TRUSTED_KEYS
+scripts/config --disable SYSTEM_REVOCATION_KEYS
+scripts/config --disable DEBUG_INFO
+scripts/config --enable DEBUG_INFO_NONE
+Jetzt wird die Konfiguration angepasst:
+$ sudo make olddefconfig
+Und schon wird der Kernel kompiliert – als root:
+$ sudo make bindeb-pkg -j `nproc` LOCALVERSION=-diggah
+In meinem Fall dauerte das Kompilieren rund 40 Minuten, einfach abwarten, bis die Arbeit abgeschlossen ist: 
+Die erstellten Pakete finden Sie jetzt ein Verzeichnis höher: 
+Sie wechseln auf dem Terminal ein Verzeichnis höher:
+$ cd ..
+Und installieren die Pakete über die Paket-Verwaltung:
+$ sudo apt install ./*.deb
+Ein Neustart des Systems und schon arbeiten Sie mit dem aktuellsten Kernel.
+
+Alte Linux Kernel in Debian finden und löschen
+Um die alten Kernel zu entfernen, müssen wir zuerst wissen, welche Version wir verwenden. Dazu öffnen wir das Terminal und schreiben Folgendes:
+$ uname -sr
+Es zeigt uns alle installierten Kernel.
+$ dpkg -l | grep linux-image | awk '{print$2}'
+Jetzt müssen wir die zu entfernenden Kernel auswählen und wie folgt vorgehen:
+$ sudo apt remove --purge linux-image-6.12.10-diggah
+$ sudo update-grub
+
+Verzeichnisse für ausführbare Dateien unter Linux hinzufügen
+https://linux-bibel.at/index.php/2024/04/06/verzeichnisse-fuer-ausfuehrbare-dateien-unter-linux-hinzufuegen/
+Unter Linux gibt es mehrere Arten, Anwendungen zu starten – grafische Anwendungen finden sich im Anwendungsmenü, wenn der Entwickler dies so vorgesehen / nicht vergessen hat. Eine weitere Möglichkeit findet sich über den Schnellstarter (Alt+F2, unter KDE auch mit Alt+Leertaste), oder eben auch über das Terminal.
+Laden Sie eine ausführbare Datei (eine binäre Datei oder auch ein Script, ein Appimage …) herunter, muss diese Datei natürlich erst einmal ausführbar sein – dies gelingt per Rechtsklick auf die Datei „Eigenschaften → Berechtigungen“ oder am Terminal mit:
+chmod +x dateiname
+Liegt die Datei jetzt in einem beliebigen Verzeichnis, müssen Sie entweder auf dem Terminal in das Verzeichnis wechseln, in dem die Datei liegt – also etwa zu Downloads:
+cd Downloads/
+Anschließend lässt sich die Datei auf dem Terminal wie folgt starten – im Beispiel nennt sich die Datei „dateiname„:
+./dateiname
+Wollen Sie nicht in das Verzeichnis wechseln, in dem die Datei liegt, müssen Sie den Pfad zur Datei angeben – also nach obigem Beispiel:
+Downloads/dateiname
+Ah, und ja, warum lassen sich jetzt gewisse Befehle auf dem Terminal starten, ohne den Pfad zur Datei anzugeben? Nehmen wir jetzt einmal den Befehl:
+ls
+Befehle, Programme, ausführbare Dateien, die Sie etwa über den Paket-Manager der Distribution installieren, legt das System automatisch in einem Verzeichnis ab, in dem das Terminal nach ausführbaren Dateien sucht. Ist dies nicht der Fall, werden entsprechende Dateien nicht gefunden – und Sie müssen dann den Pfad zur Datei angeben.
+Hier ein paar Beispiele für Verzeichnisse, in denen die Shell – also das Terminal nach ausführbaren Dateien sucht:
+    • /bin 
+    • /sbin (root) 
+    • /usr/bin 
+    • /usr/local/bin 
+    • /usr/games 
+    • /usr/local/games 
+Ein weiteres Verzeichnis, in dem oft ausführbare Dateien liegen, wäre „/opt„. Dieses Verzeichnis wird aber deshalb nicht genutzt, weil darunter, wie der Name schon sagt, optionale Software liegt. Solche Software wird in entsprechenden Unterverzeichnissen dort gespeichert – mit Unterverzeichnissen kann die Shell aber nichts anfangen.
+Anwendungen, Befehle, die in den oben genannten Verzeichnissen stehen, lassen sich hingegen auf dem Terminal starten, ohne den Pfad anzugeben – statt etwa:
+/bin/ls
+zu nutzen, genügt also ein einfaches:
+ls
+Jetzt gibt es aber so einige Paket-Manager, die nicht zur Distribution gehören und ihre Pakete in Verzeichnissen ablegen, in denen die Shell nicht nach ausführbaren Dateien sucht. Beispielsweise:
+    • Go – /home/username/go/bin 
+    • Rust (Cargo) – /home/username/.cargo/bin 
+    • Python (Pip, Pipx) – /home/username/.local/bin 
+Jetzt müssten Sie, um darin liegende ausführbare Dateien auf dem Terminal zu starten, den Pfad zu diesen angeben – nein, müssen Sie nicht. Sie müssen dem Terminal nur zeigen, wo ausführbare Dateien liegen. Dies geben Sie in der Konfigurationsdatei der genutzten Shell an. Für die Bash ist dies die Datei „/home/username/.bashrc„, für die Z-Shell (Zsh) „/home/username/.zshrc„. Diese Datei öffnen Sie mit einem beliebigen Texteditor und legen am Ende der Datei eine neue Zeile an, diese beginnt mit:
+PATH=""
+Unter doppelten Anführungszeichen geben Sie jetzt die entsprechenden Pfade an – am besten gleich alle des Systems und eben auch die Verzeichnisse, in denen sich zusätzliche ausführbare Dateien befinden. Ein Pfad wird vom anderen durch einen Doppelpunkt getrennt. Beginnen wir ganz einfach mit dem Verzeichnis „/bin„:
+PATH="/bin"
+Da es sich um ein Systemverzeichnis handelt, genügt der Slash „/„. Jetzt fügen wir etwa „/usr/local/bin“ hinzu – wir müssen unterschiedliche Pfade durch einen Doppelpunkt trennen:
+PATH="/bin:/usr/local/bin"
+Und jetzt geben wir etwa das Rust-Verzeichnis „.cargo/bin“ an – es handelt sich um kein Systemverzeichnis, Sie müssen also den kompletten Pfad durch Ihr Home-Verzeichnis angeben:
+PATH=/bin:/usr/local/bin:/home/username/.cargo/bin"
+„username“ müssen Sie natürlich durch den Ihren ersetzen. Anschließend laden Sie die Konfiguration der Shell neu oder starten diese neu:
+source ~/.bashrc
+source ~/.zshrc
+Dies funktioniert natürlich auch mit selbst erstellten Scripts, die Sie etwa unter „/home/username/Scripts“ ablegen – ganz einfach, mit allen ausführbaren Dateien.
+LinksZ
+https://linux-bibel.at/index.php/2024/03/17/den-gnome-desktop-unter-debian-12-anpassen/
+https://linux-bibel.at/index.php/2024/03/18/nemo-anstelle-von-nautilus-als-standard-dateimanager-unter-gnome/
+https://linux-bibel.at/index.php/2024/03/23/restic-terminal-basierte-datensicherungen/
+https://linux-bibel.at/index.php/2024/02/04/ttop-systemmonitor-mit-history-unter-linux/
+https://linux-bibel.at/index.php/2024/02/02/generic-colourizer-mehr-farbe-fuer-das-linux-terminal/
+
+
+Unfreie Software in Debian 12
+In Debian 12 gibt es eine grundlegende Änderung im Umgang mit "unfreien" Firmware-Paketen. Es wurde ein neues Repository erstellt, um den Zugriff auf diese proprietären Pakete zu erleichtern. Wenn du also die unfreien Pakete hinzufügen möchtest, musst du sicherstellen, dass du die folgenden Zeilen in die APT-Quellendatei - /etc/apt/sources.list einfügst.
+$ sudo nano /etc/apt/sources.list
+
+Hinzufügen der non-free und non-free-firmware Repositories:
+
+deb http://deb.debian.org/debian bookworm non-free non-free-firmware
+deb-src http://deb.debian.org/debian bookworm non-free non-free-firmware
+
+deb http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+deb-src http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+
+deb http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+deb-src http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+Speichere und schließe die Datei. Aktualisiere dann deine Debian-Installation. Wenn du das getan hast, kannst du die "unfreien" Pakete installieren.
+$ sudo apt update
+Debian Multimedia Repo konfigurieren
+Ein Debian Multimedia Repo das von der Community erstellt und für die Bookworm Veröffentlichung aktualisiert wurde. Du kannst die folgenden Zeilen in die APT-Quelldatei einfügen und so die Vorteile von hunderten von Multimedia-Paketen für deine Projekte nutzen.
+deb https://www.deb-multimedia.org bookworm main non-free
+Insgesamt erhältst du über das Repo derzeit über 780 neue Programmpakete rund um Multimedia Software wie Kodi, Gstreamer, VLC, Youtube-DL und vieles mehr.
+$ wget https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2016.8.1_all.deb
+
+$ sudo dpkg -i deb-multimedia-keyring_2016.8.1_all.deb
+
+$ sudo apt-get update
+Du kannst die offizielle Seite besuchen, um mehr über dieses Repo zu erfahren.
+GPG-Fehler
+W: GPG-Fehler: https://www.deb-multimedia.org bookworm InRelease: Die folgenden Signaturen konnten nicht überprüft werden, weil ihr öffentlicher Schlüssel nicht verfügbar ist: NO_PUBKEY 5C808C2B65558117
+E: Das Depot »https://www.deb-multimedia.org bookworm InRelease« ist nicht signiert.
+
+Paket deb-multimedia-keyring installieren.
+https://deb-multimedia.org/dists/experimental/main/binary-amd64/package/deb-multimedia-keyring
+$ sudo chmod +x deb-multimedia-keyring_2016.8.1_all.deb 
+$ sudo apt install ./*.deb
+$ sudo apt update
+
+
+Yt-dlp Commands
+$ sudo apt install yt-dlp
+or
+$ sudo wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp
+$ sudo chmod a+rx /usr/local/bin/yt-dlp
+$ sudo yt-dlp -U
+$ yt-dlp https://www.youtube.com/watch?v=t5b20oLaIaw
+$ yt-dlp -x --audio-format mp3 https://www.youtube.com/watch?v=t5b20oLaIaw
+
+$ yt-dlp -f best https://www.youtube.com/watch?v=t5b20oLaIaw
+$ yt-dlp -f bestaudio <URL>
+
+
+
+
+Mit folgendem Befehlen wird die Platte gemountet: 
+      # mkdir /media/sda3 
+      # mount /dev/sda3 /media/sda3
+    • Damit die Festplatte auch nach dem nächsten Reboot wieder automatisch gemountet wird ergänzen Sie folgende Zeile in der Datei /etc/fstab: 
+      /dev/sda3 /media/sda3 ext3 rw 0 0
+
+Festplatte einbinden / mounten
+    • einbinden / mounten der Platte
+mkdir /media/sda2 – erstellen eines Einhängepunktes
+mount /dev/sda2 /media/sda2 – einhängen der Platte
+    • aushängen / unmounten der Platte:
+umount /dev/sda2
+Festplatte bei reboot automatisch mounten
+    • damit die Festplatte auch nach dem nächsten Reboot wieder automatisch gemountet wird ergänzen wir folgende Zeile in der Datei /etc/fstab:
+/dev/sda2 /media/sda2 ext3 defaults,nofail,x-systemd.device-timeout=5,rw 0 2
+        ◦ nofail – verhindert dabei das der Bootvorgang auch weitergeht wenn der der Datenträger nicht gefunden wird
+        ◦ x-systemd.device-timeout=5 – beschleunigt die normale Timeout Wartezeit (ca. 90s) auf den fehlenden Datenträger, auf nun 5 sec.
+        ◦ rw – bindet den Datenträger lesend und schreibend ein
+sudo blkid
+sudo nano /etc/fstab
+Neue Festplatte unter Linux hinzufügen
+15. August 2019 · Betriebssysteme · andreas · Kein Kommentar 
+Sowohl unter Linux als auch unter Windows gibt es verschiedene Möglichkeiten, eine zusätzliche Platte in Betrieb zu nehmen. Während unter Windows das Kommandozeilen-Programm “diskpart” zwar vorhanden ist, aber selten genutzt wird, ist unter Linux eher die Kommandozeile gängig, als die Arbeiten mit z.B. “gnome-disks” zu erledigen.
+Im ersten Schritt werden die vorhandenen Laufwerke aufgelistet. Dies dient dazu sicherzustellen, daß die zusätzliche Festplatte auch fehlerfrei eingebaut und erkannt wurde und um den Namen zu erfahren, welcher der Platte vom System zugewiesen wurde:
+$ sudo fdisk -l
+...
+Disk /dev/sda: 931,5 GiB, 1000204886016 bytes, 1953525168 sectors
+Disk model: Samsung SSD 860 
+...
+Zu erkennen ist die Platte zum einen am Namen (und ggf. an der Größe), zum anderen daran, daß - sofern es sich um eine neue Platte handelt - noch keine Partitionen darauf angelegt wurden.
+Nachdem die Platte identifiziert wurde (im Beispielfall “/dev/sda”), kann diese im nächsten Schritt partitioniert werden:
+$ sudo fdisk /dev/sda
+
+Welcome to fdisk (util-linux 2.33.1).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+
+Command (m for help): n
+Partition type
+p primary (0 primary, 0 extended, 4 free)
+e extended (container for logical partitions)
+Select (default p):
+
+Using default response p.
+Partition number (1-4, default 1): 
+First sector (2048-1953525167, default 2048): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-1953525167, default 1953525167):
+
+Created a new partition 1 of type 'Linux' and of size 931,5 GiB.
+
+Command (m for help): w
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+Sofern keine weitere Unterteilung gewünscht ist, können hier einfach die Vorgaben übernommen werden:
+    • “n” (für neue Partition),
+    • “Enter” (um eine primäre Parition anzulegen),
+    • “Enter” um die Partition mit der Nummer “1” anzulegen,
+    • “Enter” zum Bestätgen des Startsektors,
+    • “Enter” zum Bestätgen des Endsektors,
+    • “w” zum Speichern der Änderungen und verlassen
+Als Nächstes wird das Dateisystem “ext4” auf der soeben erzeugten Partition erzeugt:
+$ sudo mkfs.ext4 /dev/sda1
+mke2fs 1.44.5 (15-Dec-2018)
+Discarding device blocks: done 
+Creating filesystem with 244190390 4k blocks and 61054976 inodes
+Filesystem UUID: bd54c452-1234-5678-a294-d22cb9d6be33
+...
+Writing superblocks and filesystem accounting information: done
+Um die Platte dauerhaft einzuhängen, muß noch ein entsprechender Eintrag in der fstab gemacht werden. Zwar würde es funktionieren, die Partition über ihren Gerätenamen “/dev/sda1” einzubinden, jedoch kann dieser sich u.U. ändern.
+Aus diesem Grund ist einer Einbindung über die eindeutige UUID den Vorzug zu geben. Diese kann entweder der Ausgabe des soeben durchgeführten “mkfs.ext4” entnommen werden oder mit Hilfe des Befehls “blkid”:
+$ sudo blkid 
+...
+/dev/sda1: UUID="bd54c452-1234-5678-a294-d22cb9d6be33" TYPE="ext4" PARTUUID="6f084731-01"
+Letztendlich stellt sich noch die Frage: wohin mit der neuen Platte im Dateisystem?
+Obwohl sich die verschiedenen Distributionen in den letzten Jahren auf einen Filesystem Hierarchy Standard geeinigt haben, schweigt sich dieser interessanterweise genau zu diesem Punkt aus.
+Als bestehende Einhängepunkte bieten sich “/mnt/neueplatte” (eigentlich für Temporarily mounted filesystems gedacht), “/media/neueplatte” (Mount points for removable media), das in macOS verwendete “/Volumes/neueplatte” oder auch ein davon inspiriertes “/vol/neueplatte”.
+$ sudo mkdir /vol
+$ sudo mkdir /vol/neueplatte
+Nachdem der Einhängepunkt erzeugt wurde, kann über einen entsprechenden Eintrag in der Datei “/etc/fstab” die Platte bei jedem Start automatisch eingehängt werden:
+...
+# 2019-08-15 athul/added 2nd disk
+UUID=bd54c452-1234-5678-a294-d22cb9d6be33 /vol/neueplatte ext4 defaults 0 2
+Nach einem Reboot steht die Platte dann im Verzeichnis “/vol/neueplatte” zur Verfügung. Eine Übersicht über die zum Einhängen verwendeten Felder liefert das Debian-Wiki.
+
+
+Zugriffsrechte im Dateisystem setzen 
+Bei neu in das Dateisystem eingebundenen Ext4-Partitionen (ebenso XFS oder BTRFS) hat nur „root“ Schreibzugriff, andere Benutzer erhalten nur Lesezugriff. Wenn Sie der einzige Benutzer des Systems sind, können Sie es sich einfach machen. Mit 
+sudo chmod -cR 777 /media/hstr/tugce
+root user run the chmod -R 777 / command and all file permissions for the entire system have read/write/execute for every user.
+
+***Note: Never run this command***
+
+While that may be reasonable for some, it is not a good suggestion for everyone. You note that the other directories in that location are 755 and general practice is to never use 777 for permissions but use 755 instead.
+
+
+
